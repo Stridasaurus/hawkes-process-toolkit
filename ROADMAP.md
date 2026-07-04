@@ -65,11 +65,11 @@ Stop research and lock a manifesto when ALL of:
 - **Decision rule:** exp-kernel fit on the N1 substrate passes GOF (KS p > 0.05 on time-rescaled inter-event times) with branching ratio in (0, 1).
 - **Outcomes:** → parametric-first (nonparametric becomes an optional capability in the manifesto) | → parametric-insufficient: activate N3-alt | → data-unsuitable: return to N1, take the runner-up substrate.
 - **Kill criteria:** if two substrates in a row prove data-unsuitable, the roadmap frontier returns to N1 with the criteria themselves under review — do not keep burning substrates against an unexamined rule.
-- **Status:** pending (blocked on N1 + N2).
+- **Status:** resolved (2026-07-04) → parametric-insufficient. See `experiments/e3-real-data-gof/RESULTS.md`: exp-kernel fit on Binance 01:00-02:00 UTC (11,873 events) gives a valid branching ratio (n=0.332) but fails GOF decisively (KS D=0.0583, p≈0.0000; critical D at this n is ≈0.0125, so D is ~4.7x the rejection threshold). Reproduced on an independent window (14:00-15:00 UTC, n=0.222, D=0.0352, p≈0.0000) — not a window-choice fluke. **Activates N3-alt.**
 
-### N3-alt — Nonparametric branch *(stub — do not elaborate until N3 resolves against parametric)*
-- **Assumption:** a nonparametric estimator passes GOF where the exp kernel failed. Eventual experiment: E5 (unwritten — write the card only if this node activates).
-- **Status:** pending stub.
+### N3-alt — Nonparametric branch *(activated 2026-07-04 by N3's parametric-insufficient result)*
+- **Assumption:** a nonparametric estimator passes GOF where the exp kernel failed. Eventual experiment: E5.
+- **Status:** activated, E5 not yet written — this is a real scope/design decision (estimator family, manifesto-stub impact) flagged back to Strider rather than improvised. See session notes.
 
 ### N4 — Engine transfer (the load-bearing thesis question)
 - **Assumption:** the fitting engine that passed N3 fits a second substrate with adapter-only changes.
@@ -141,8 +141,12 @@ Stop research and lock a manifesto when ALL of:
 
   Binance and LOBSTER both pass all three criteria; tie broken toward **Binance** (more event volume for the same pull, 24/7 continuous trading avoids equity-auction regime breaks, zero-friction access) with **LOBSTER as the designated runner-up substrate for E4** (transfer). N1 resolved → crypto ticks. Full detail, plots, and raw samples in `experiments/e1-substrate-recon/`.
 
+- **2026-07-04** — E3 run (`experiments/e3-real-data-gof/`). Exp-kernel MLE (unchanged `hawkes_core.py` from E2) fit to Binance BTCUSDT aggTrades, 01:00-02:00 UTC window, 11,873 unique-ms events (simultaneous same-ms prints collapsed to one event — a timestamp-resolution artifact, not marks). Fit: μ=2.204, α=42.660, β=128.547, branching ratio n=0.332 (valid). **GOF fails decisively**: KS D=0.0583, p≈0.0000 (critical D at this n ≈0.0125, so D is ~4.7x the rejection threshold). Reproduced on an independent window (14:00-15:00 UTC, n=15,024 events, n_branch=0.222, D=0.0352, p≈0.0000) — ruling out a window-choice fluke. Consistent with the market-microstructure literature (single-exponential kernels are typically insufficient for real order flow). **N3 → resolved: parametric-insufficient. N3-alt activated** — E5 (nonparametric estimator) deliberately left unwritten pending Strider's input on estimator family and manifesto-stub impact, per the roadmap's lazy-elaboration rule and the explicit stop-and-flag instruction from this project's handoff notes.
+
 ## Status / current frontier
 
-- **Active node:** N1 (first substrate), with N2 runnable in parallel — they share no dependency.
-- **Running experiment:** none yet; E1 is next, E2 may interleave.
-- **Manifesto:** none being written; blocked on the exit conditions above.
+- **N1:** resolved → Binance (primary), LOBSTER (runner-up for E4).
+- **N2:** resolved → pass. Derivations trusted, `hawkes_core.py` is the frozen fitting engine.
+- **N3:** resolved → parametric-insufficient. **N3-alt activated, blocking the frontier** — E5 (nonparametric estimator) needs a scope decision (estimator family; manifesto-stub impact) before it can be written and run. Flagged to Strider rather than improvised.
+- **N4:** blocked on N3-alt/E5 resolving before transfer can be tested against a trusted engine.
+- **Manifesto:** none being written; blocked on the exit conditions above — specifically exit condition 1 (N1-N4 each resolved) is not yet met (N3-alt is open) and exit condition 3 (N4 recorded outcome) can't be reached until N3-alt resolves.
