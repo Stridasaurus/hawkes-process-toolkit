@@ -1,0 +1,218 @@
+[
+  {
+    "param_set": "low_n (n=0.15)",
+    "seed": 0,
+    "n_events": 10096,
+    "truth": {
+      "mu": 0.5,
+      "alpha": 0.3,
+      "beta": 2.0
+    },
+    "fit": {
+      "mu": 0.5116251559711624,
+      "alpha": 0.2770286719828941,
+      "beta": 1.9999632813328843
+    },
+    "rel_err_pct": {
+      "mu": 2.33,
+      "alpha": 7.66,
+      "beta": 0.0
+    },
+    "all_under_10pct": true,
+    "ks_stat": 0.007719219003854416,
+    "ks_p": 0.5815260304926975,
+    "ks_pass": true
+  },
+  {
+    "param_set": "low_n (n=0.15)",
+    "seed": 1,
+    "n_events": 10078,
+    "truth": {
+      "mu": 0.5,
+      "alpha": 0.3,
+      "beta": 2.0
+    },
+    "fit": {
+      "mu": 0.5089438220959989,
+      "alpha": 0.27627973416453305,
+      "beta": 1.9525305405746614
+    },
+    "rel_err_pct": {
+      "mu": 1.79,
+      "alpha": 7.91,
+      "beta": 2.37
+    },
+    "all_under_10pct": true,
+    "ks_stat": 0.008363557718103931,
+    "ks_p": 0.47868269863822155,
+    "ks_pass": true
+  },
+  {
+    "param_set": "low_n (n=0.15)",
+    "seed": 2,
+    "n_events": 10127,
+    "truth": {
+      "mu": 0.5,
+      "alpha": 0.3,
+      "beta": 2.0
+    },
+    "fit": {
+      "mu": 0.5040962121185353,
+      "alpha": 0.33016587499555183,
+      "beta": 2.146953558094923
+    },
+    "rel_err_pct": {
+      "mu": 0.82,
+      "alpha": 10.06,
+      "beta": 7.35
+    },
+    "all_under_10pct": false,
+    "ks_stat": 0.005738520840372907,
+    "ks_p": 0.8906524538364751,
+    "ks_pass": true
+  },
+  {
+    "param_set": "mid_n (n=0.5)",
+    "seed": 0,
+    "n_events": 10003,
+    "truth": {
+      "mu": 0.2,
+      "alpha": 0.5,
+      "beta": 1.0
+    },
+    "fit": {
+      "mu": 0.2040932810956611,
+      "alpha": 0.47741932905376955,
+      "beta": 0.9744845169548036
+    },
+    "rel_err_pct": {
+      "mu": 2.05,
+      "alpha": 4.52,
+      "beta": 2.55
+    },
+    "all_under_10pct": true,
+    "ks_stat": 0.006205252229609437,
+    "ks_p": 0.833487641678009,
+    "ks_pass": true
+  },
+  {
+    "param_set": "mid_n (n=0.5)",
+    "seed": 1,
+    "n_events": 10150,
+    "truth": {
+      "mu": 0.2,
+      "alpha": 0.5,
+      "beta": 1.0
+    },
+    "fit": {
+      "mu": 0.2023616706702289,
+      "alpha": 0.48261777254322785,
+      "beta": 0.9622053193061038
+    },
+    "rel_err_pct": {
+      "mu": 1.18,
+      "alpha": 3.48,
+      "beta": 3.78
+    },
+    "all_under_10pct": true,
+    "ks_stat": 0.006002966482258509,
+    "ks_p": 0.8556610100028262,
+    "ks_pass": true
+  },
+  {
+    "param_set": "mid_n (n=0.5)",
+    "seed": 2,
+    "n_events": 10061,
+    "truth": {
+      "mu": 0.2,
+      "alpha": 0.5,
+      "beta": 1.0
+    },
+    "fit": {
+      "mu": 0.19534632665876453,
+      "alpha": 0.4895920779991243,
+      "beta": 0.9514116377667369
+    },
+    "rel_err_pct": {
+      "mu": 2.33,
+      "alpha": 2.08,
+      "beta": 4.86
+    },
+    "all_under_10pct": true,
+    "ks_stat": 0.005862304314546485,
+    "ks_p": 0.877662356130417,
+    "ks_pass": true
+  },
+  {
+    "param_set": "near_critical (n=0.9)",
+    "seed": 0,
+    "n_events": 9837,
+    "truth": {
+      "mu": 0.1,
+      "alpha": 0.9,
+      "beta": 1.0
+    },
+    "fit": {
+      "mu": 0.10053801233983292,
+      "alpha": 0.8572298256377945,
+      "beta": 0.9548157587511348
+    },
+    "rel_err_pct": {
+      "mu": 0.54,
+      "alpha": 4.75,
+      "beta": 4.52
+    },
+    "all_under_10pct": true,
+    "ks_stat": 0.0066109767830184185,
+    "ks_p": 0.7805276165737798,
+    "ks_pass": true
+  },
+  {
+    "param_set": "near_critical (n=0.9)",
+    "seed": 1,
+    "n_events": 10461,
+    "truth": {
+      "mu": 0.1,
+      "alpha": 0.9,
+      "beta": 1.0
+    },
+    "fit": {
+      "mu": 0.10542305773784909,
+      "alpha": 0.8805161169440029,
+      "beta": 0.9791655338525673
+    },
+    "rel_err_pct": {
+      "mu": 5.42,
+      "alpha": 2.16,
+      "beta": 2.08
+    },
+    "all_under_10pct": true,
+    "ks_stat": 0.007642383997120028,
+    "ks_p": 0.5715718942539311,
+    "ks_pass": true
+  },
+  {
+    "param_set": "near_critical (n=0.9)",
+    "seed": 2,
+    "n_events": 10902,
+    "truth": {
+      "mu": 0.1,
+      "alpha": 0.9,
+      "beta": 1.0
+    },
+    "fit": {
+      "mu": 0.09885628822183556,
+      "alpha": 0.8881040879117039,
+      "beta": 0.9766653124760439
+    },
+    "rel_err_pct": {
+      "mu": 1.14,
+      "alpha": 1.32,
+      "beta": 2.33
+    },
+    "all_under_10pct": true,
+    "ks_stat": 0.005652035124939392,
+    "ks_p": 0.8750396396599429,
+    "ks_pass": true
+  }
+]
