@@ -1,0 +1,16 @@
+{
+  "1exp": {
+    "full_n": 11873,
+    "full_ks_p": 1.4468302954620787e-35,
+    "reference_n": 2000,
+    "subsampled_median_p": 3.537718397711456e-08,
+    "subsampled_pass_fraction": 0.0
+  },
+  "2exp": {
+    "full_n": 11873,
+    "full_ks_p": 7.937193198738601e-23,
+    "reference_n": 2000,
+    "subsampled_median_p": 0.0002774151226322794,
+    "subsampled_pass_fraction": 0.0
+  }
+}
