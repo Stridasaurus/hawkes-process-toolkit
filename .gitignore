@@ -9,3 +9,6 @@ data/raw/
 *.log
 .DS_Store
 .claude/worktrees/
+
+# E1 substrate recon: large raw pulls kept locally, not committed
+experiments/e1-substrate-recon/*.nwb

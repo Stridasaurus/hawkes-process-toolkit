@@ -49,7 +49,7 @@ Stop research and lock a manifesto when ALL of:
 - **Decision rule:** per substrate, score three criteria — (a) ≥10⁴ events obtainable within ~30 min effort, (b) timestamp resolution finer than the mean inter-event interval, (c) a plausibly stationary segment extractable. Pick the substrate meeting the most criteria; break ties by quant-application value (crypto / LOBSTER > neural > geomagnetic).
 - **Outcomes:** → crypto ticks | → LOBSTER LOB | → neural spikes | → geomagnetic. All continue to N2.
 - **Kill criteria:** if no substrate meets criterion (a) within the timebox, proceed on synthetic data only, resolve N2 anyway, and re-run E1 with a widened source list before N3.
-- **Status:** active (2026-07-04).
+- **Status:** resolved (2026-07-04) → crypto ticks (Binance).
 
 ### N2 — Estimator correctness (theory-grounding gate)
 - **Assumption:** a hand-derived exp-kernel MLE plus an Ogata-thinning simulator, both written from first principles, recover known parameters on synthetic data.
@@ -129,6 +129,17 @@ Stop research and lock a manifesto when ALL of:
 
 - **2026-07-04** — Roadmap created from the sessions 41–42 handoff (vault note `20260704-hawkes-toolkit-roadmap-handoff.md`). Scoping decisions imported as invariants: Python library-quality core, public data only, quant-application value target, theory-grounding requirement, Dynamica as future hook only. Decision frontier initialized: N1 active, E1 ready to run. No experiments run yet.
 - **2026-07-04** — E2 run (`experiments/e2-synthetic-recovery/`). Derived conditional-intensity Markov recursion, log-likelihood (with compensator boundary term), Ogata thinning, time-rescaling transform (`derivations.md`). Implemented simulator + multi-start MLE + KS-based GOF (`hawkes_core.py`), tested recovery across 3 ground-truth parameter sets (n=0.15/0.50/0.90) × 3 seeds each. Result: 8/9 runs pass all three parameters under 10% relative error; 9/9 pass KS p>0.05 including all near-critical seeds. One marginal miss (low_n seed 2, α=10.06%) diagnosed as finite-sample noise, not a bug (see RESULTS.md). **N2 → resolved: pass.**
+
+- **2026-07-04** — E1 substrate recon run (scripts + RESULTS.md in `experiments/e1-substrate-recon/`). Scoring table (criteria a/b/c, ≤30min/substrate):
+
+  | Substrate | (a) ≥1e4 events | (b) resolution < mean IEI | (c) stationary segment |
+  |---|---|---|---|
+  | Binance aggTrades (BTCUSDT, 1 day) | PASS (554,441 events) | PASS (1ms res vs 155.8ms mean IEI) | PASS (hour-long sub-windows near-stationary) |
+  | LOBSTER (AAPL message file, 1 day, 10 levels) | PASS (400,391 events) | PASS (1ns res vs 58.4ms mean IEI) | PASS (mid-morning window flat; open/close auctions non-stationary) |
+  | Allen Institute (Cell Types single-neuron patch-clamp) | FAIL (779 spikes total for one cell — pooling cells isn't one coherent process) | PASS but moot | FAIL (trial-based evoked sweeps, not spontaneous) |
+  | SuperMAG (1-min magnetometer, HBK/OTT) | FAIL (backend `shell_exec` crash on every call with the userid as given; likely a one-letter userid typo in the task brief — flagged for the user, not acted on) | N/A | N/A |
+
+  Binance and LOBSTER both pass all three criteria; tie broken toward **Binance** (more event volume for the same pull, 24/7 continuous trading avoids equity-auction regime breaks, zero-friction access) with **LOBSTER as the designated runner-up substrate for E4** (transfer). N1 resolved → crypto ticks. Full detail, plots, and raw samples in `experiments/e1-substrate-recon/`.
 
 ## Status / current frontier
 
