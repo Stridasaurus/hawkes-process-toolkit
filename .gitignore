@@ -8,3 +8,6 @@ venv/
 data/raw/
 *.log
 .DS_Store
+
+# E1 substrate recon: large raw pulls kept locally, not committed
+experiments/e1-substrate-recon/*.nwb
