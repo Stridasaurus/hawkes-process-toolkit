@@ -31,18 +31,39 @@ window-choice fluke:
 Two independent windows, both valid branching ratios, both clean rejections.
 Consistent, reproducible signal — not noise from one window's idiosyncrasies.
 
-## Interpretation: why a "small" D is a decisive failure here
+## Why a "small" D is a decisive failure — and what the QQ shape actually shows
 
 KS's critical D at α=0.05 scales as ≈1.36/√n. At n≈11,873 that's ≈0.0125 — so
-the observed D=0.0583 (01-02 UTC) is **~4.7× the rejection threshold**, not a
-borderline call. This is the well-known empirical result from the market-
-microstructure Hawkes literature (Bacry, Muzy et al.): single-exponential
-kernels are typically insufficient for real order-flow clustering, because
-excitation genuinely decays slower than pure-exponential at longer lags
-(power-law-like tails). The failure is a real kernel-shape misspecification,
-not a bug — it reproduces cleanly across two independent windows/sessions and
-the branching ratio (the part the exponential form gets approximately right)
-lands in a sane range both times.
+the observed D=0.0583 (01-02 UTC) is **~4.7× the rejection threshold**, a real
+rejection, not a borderline call inflated by sample size alone.
+
+**`binance_residual_qq.png` (read, not just generated) shows a specific
+shape**: the bulk of residuals (~98% of the distribution, rescaled quantile
+≲4) track the Exp(1) reference line almost exactly. The deviation is
+concentrated in the upper tail — a smooth, progressively widening excess
+starting around the top ~2% of residuals, not a handful of isolated outliers
+and not a uniform bend across the whole distribution.
+
+This shape is a weaker match to "single-exponential kernel is globally the
+wrong functional form" (Bacry/Muzy-style power-law excitation) than to
+**within-window non-stationarity**: E1 only eyeballed the 01:00-02:00 UTC
+window as "locally near-stationary" from a 5-second-bin event-rate histogram
+— that was never a statistical test. A brief regime shift inside the hour
+(a quiet lull, a small volatility burst) would show up exactly as an
+otherwise-good fit with a heavy tail of anomalously large or small
+rescaled gaps, which is what's observed. The fitted β≈128-160 (a 6-8ms
+excitation timescale, right at the 1ms/dedup grid) is also consistent with
+the exponential kernel mainly capturing the fastest microstructure scale
+and not necessarily "missing a slower kernel component" — that's suggestive,
+not proof.
+
+**Net: the data rules out "parametric is simply fine," but does not cleanly
+discriminate between "the kernel shape is wrong" (motivating N3-alt as
+scoped — nonparametric) vs. "the window isn't as stationary as assumed"
+(motivating a preprocessing fix, or a cheaper parametric extension like
+sum-of-two-exponentials, before reaching for nonparametric estimation).**
+This ambiguity, not just the GOF failure itself, is why the decision is being
+flagged rather than resolved unilaterally.
 
 ## N3 decision
 
