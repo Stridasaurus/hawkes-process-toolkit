@@ -1,0 +1,17 @@
+name: hawkes-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - ipykernel
+  - pip
+  - pip:
+    - requests
+    - certifi
+    - h5py
+    - pytest
