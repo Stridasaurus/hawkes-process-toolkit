@@ -69,7 +69,11 @@ Stop research and lock a manifesto when ALL of:
 
 ### N3-alt — Nonparametric branch *(activated 2026-07-04 by N3's parametric-insufficient result)*
 - **Assumption:** a nonparametric estimator passes GOF where the exp kernel failed. Eventual experiment: E5.
-- **Status:** blocked, off-map, pending Strider's decision (three options below) — this is the frontier as the session ends.
+- **Status:** decision made (2026-07-07, Strider): before committing to E5 or a negative rescope, run two cheap spikes — **E6** (LOBSTER exp-kernel generality) and **E7** (power-law long-memory kernel on Binance). Rationale: the E3 QQ signature (clean ~98% bulk, smooth top-~2% tail excess) plus the multi-scale misfit points at **long memory**, not short-scale kernel shape — the 2-exp attempt's slow component (~939ms) never tested seconds-to-minutes memory; and exp-Hawkes failing GOF on tick data while power-law kernels fit is documented microstructure literature (Hardiman & Bouchaud; Bacry–Mastromatteo–Muzy 2015 review), so the standalone negative result is weaker portfolio material than the three-option handoff assumed, while the standard fix is cheaply testable with the existing multi-exp machinery.
+- **Outcome mapping (pre-registered before either experiment runs):**
+  - **E7 passes GOF** → parametric-with-long-memory is sufficient → manifesto = **Stub B** (kernel-pluggable engine), with E6's result feeding the kernel-selection guide either way; N4 proceeds with the passing engine configuration.
+  - **E7 fails, E6 passes** → the exp-kernel failure is crypto-specific → N1 amended: LOBSTER promoted to primary substrate, parametric path resumes toward N4 with Binance as the transfer target.
+  - **Both fail** → return to Strider with exactly two options: E5 (full nonparametric) or negative-result rescope (deeper than Stub C). Pre-registered: no third parametric kernel attempt.
 
 **Full chain of evidence (2026-07-04), most decisive last:**
 1. **Attempt 1 (sum-of-2-exponentials)** — `experiments/e3-alt-two-exp-kernel/RESULTS.md`. Same window, richer parametric kernel (fast ~5.8ms + slow ~939ms components, valid branching ratio n=0.627): KS D=0.0466, p≈0.0000 — same tail-only deviation shape as the single-exponential fit, barely moved. Both engines pass their own synthetic self-tests (real model/data mismatch, not a bug).
@@ -124,6 +128,25 @@ Stop research and lock a manifesto when ALL of:
 - **Where it runs:** scratch scripts outside any repo.
 - **Outputs that prove the result:** dated Experiment Log entry with GOF numbers and the diff-audit statement; this entry names the Manifesto Stub to expand.
 
+### E6 — Exp-kernel generality spike on LOBSTER
+- **Assumption under test:** N3-alt's — whether the parametric failure is specific to Binance/crypto microstructure or general across market microstructure.
+- **Method:** adapter-only — write a LOBSTER adapter (E1's retained AAPL message-file sample → event-time array, mid-morning stationary window per E1's recon), then run the unchanged E3 procedure: exp-kernel MLE from `hawkes_core.py`, time-rescaling GOF. Zero changes to the fitting engine.
+- **Runnable check / metric:** KS p on rescaled inter-event times; branching ratio in (0, 1); QQ plot retained and inspected for the same tail-excess shape as Binance; secondary: the multi-scale subsampled-KS pass-fraction profile, for direct comparison against Binance's 0.30→0.00 decline.
+- **Timebox / cost:** ~2 h.
+- **Kill criteria:** if preprocessing consumes more than half the timebox, record E6 as inconclusive (data-unsuitable) rather than forcing it — it is a spike, not a gate.
+- **Where it runs:** `experiments/e6-lobster-generality/`.
+- **Note:** E6 is *not* E4 — transfer (N4) requires a *passing* engine; E6 tests failure generality. Its adapter is reusable for E4 later.
+- **Outputs that prove the result:** dated Experiment Log entry with KS numbers and an explicit same-vs-different failure-shape judgment vs E3.
+
+### E7 — Power-law (long-memory) kernel on Binance
+- **Assumption under test:** the E3 QQ tail excess is long-memory misfit — a power-law kernel φ(t) ∝ (t+c)^−(1+ε), approximated as a sum of M exponentials, passes GOF where 1-exp and 2-exp failed.
+- **Method:** extend `hawkes_core.py`'s multi-exp path to M components with rates log-spaced over ~1 ms to ~10 min (M ≈ 6–8) and weights tied to (or initialized from) a power-law profile; the per-component Markov recursion keeps the likelihood O(n·M). MLE via the existing multi-start optimizer; same two windows as E3 (01:00–02:00 and 14:00–15:00 UTC).
+- **Runnable check / metric:** primary — KS p > 0.05 on rescaled inter-event times AND branching ratio in (0, 1), on both E3 windows. Secondary (pre-registered here, not post-hoc): multi-scale subsampled-KS pass fraction ≈ 0.95 at every reference n. Also retain a plot of the fitted kernel over the rate grid — does it actually hold a power-law profile, or collapse to a few effective components?
+- **Timebox / cost:** ~3 h.
+- **Kill criteria:** optimizer non-convergence after multi-start within the timebox → record "power-law approximation infeasible with current machinery" and treat as *fail* in N3-alt's outcome mapping; no bespoke optimizer engineering.
+- **Where it runs:** `experiments/e7-power-law-kernel/`.
+- **Outputs that prove the result:** dated Experiment Log entry with KS numbers per window, branching ratio, fitted-kernel plot, and which N3-alt outcome-mapping row it triggers.
+
 ## Manifesto Stubs
 
 **Stub A — Cross-substrate Hawkes toolkit (thesis holds).** Scope: one fitting engine, N substrate adapters, shipped as a tested Python package with per-substrate demonstration notebooks. Core users: Strider as quant applicant (order-flow notebook is the portfolio piece) and as PhD applicant (spike-train notebook); secondarily, anyone fitting Hawkes models on public data. Defining constraint: the engine must never contain substrate-specific code — adapters are the only variation point. Capabilities: Ogata-thinning simulator, exp-kernel MLE (nonparametric optional per N3), time-rescaling GOF suite, adapters (per E1/E4 results), intensity/residual viz, theory notebook with the E2 derivations.
@@ -151,11 +174,13 @@ Stop research and lock a manifesto when ALL of:
 - **2026-07-04** — E3 run (`experiments/e3-real-data-gof/`). Exp-kernel MLE (unchanged `hawkes_core.py` from E2) fit to Binance BTCUSDT aggTrades, 01:00-02:00 UTC window, 11,873 unique-ms events (simultaneous same-ms prints collapsed to one event — a timestamp-resolution artifact, not marks). Fit: μ=2.204, α=42.660, β=128.547, branching ratio n=0.332 (valid). **GOF fails decisively**: KS D=0.0583, p≈0.0000 (critical D at this n ≈0.0125, so D is ~4.7x the rejection threshold). Reproduced on an independent window (14:00-15:00 UTC, n=15,024 events, n_branch=0.222, D=0.0352, p≈0.0000) — ruling out a window-choice fluke. **QQ plot inspected** (not just generated): bulk of residuals (~98%) track Exp(1) almost exactly; deviation is a smooth, progressively-widening excess concentrated in the top ~2% tail. **N3 → resolved: parametric-insufficient. N3-alt activated.**
 - **2026-07-04** — N3-alt attempt 1 (sum-of-2-exponentials) and bar-reconsideration (both Strider-directed). 2-exp kernel: same tail-deviation shape, D=0.0466 (barely moved from 1-exp's 0.0583) — disfavors kernel-shape as the sole culprit without confirming the alternative. Multi-scale subsampled-KS test of the GOF bar itself: pass fraction declines monotonically from 0.30 (n=300) to 0.00 (n≥2000), the signature of a model misspecified at every scale (a correctly-specified model would hold ≈0.95 pass fraction at any n) — **decisively rules out "the bar is just too strict for large n."** Full detail: `experiments/e3-alt-two-exp-kernel/RESULTS.md` and `gof_bar_reconsidered_RESULTS.md`. **N3/N3-alt final: parametric estimation is robustly insufficient on Binance — not a bug, not a large-n artifact, not rescued by kernel enrichment or bar reconsideration.** Off-map relative to all three manifesto stubs (each assumes a passing N3). Handed off for Strider's decision: try LOBSTER / commit to full nonparametric E5 / accept as the project's negative result and rescope.
 
+- **2026-07-07** — **N3-alt decision made** (Strider, Fable session, decision structured via option review + AskUserQuestion): run **E6** (LOBSTER exp-kernel generality spike) + **E7** (power-law long-memory kernel on Binance via sum-of-M-exponentials) before any commitment to E5 or a negative rescope. Basis: the E3 QQ signature (clean bulk, smooth top-~2% tail excess) and the multi-scale misfit point at long memory rather than short-scale kernel shape; exp-Hawkes failing GOF on tick data is documented microstructure folklore while power-law kernels are the literature-standard fix (Hardiman & Bouchaud; Bacry–Mastromatteo–Muzy 2015) — so the negative result alone under-delivers as portfolio material and the standard fix is cheap with existing machinery. Outcome mapping pre-registered in the N3-alt node before either experiment runs (E7 pass → Stub B; E7 fail + E6 pass → LOBSTER promoted primary; both fail → E5 vs rescope returns to Strider, no third parametric attempt). Cards E6/E7 written and wired into the tree, card list, and frontier. No experiments run this session. Separately decided the same session: Dynamica reserves a *hook* for a future Hawkes cross-substrate triple (order flow / spike trains / cascades) — per this roadmap's invariant, that remains a future hook only, never a phase or dependency here.
+
 ## Status / current frontier
 
 - **N1:** resolved → Binance (primary), LOBSTER (runner-up for E4).
 - **N2:** resolved → pass. Derivations trusted, `hawkes_core.py` is the frozen fitting engine.
 - **N3:** resolved → parametric-insufficient, robust to kernel enrichment (2-exp) and to GOF-bar reconsideration (multi-scale subsampled KS). Real, decisive negative result, not an execution gap.
-- **N3-alt:** blocking the frontier — three live options (LOBSTER / full nonparametric E5 / accept-and-rescope), each a genuine scope decision, handed to Strider rather than improvised.
-- **N4:** blocked on N3-alt resolving.
-- **Manifesto:** none being written; blocked on exit condition 2 (no real substrate has passed GOF yet) and condition 3 (N4 has no outcome). This is the session's stopping point — **not reachable this session regardless of further effort**, since the remaining step is a scope decision only Strider can make.
+- **N3-alt:** decision made (2026-07-07) → run **E6 + E7**, outcome mapping pre-registered in the node. Neither experiment has run yet — **E6 and E7 are the frontier**; either order works, E7 is the higher-information one.
+- **N4:** blocked pending E7 (transfer needs a passing engine configuration).
+- **Manifesto:** still blocked on exit condition 2 (no real substrate has passed GOF yet) and condition 3 (N4 has no outcome). If E7 passes, the expected stub is **Stub B** (kernel-pluggable) per N3-alt's outcome mapping.
